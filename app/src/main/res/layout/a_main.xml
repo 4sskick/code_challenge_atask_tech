@@ -10,19 +10,31 @@
         android:id="@+id/rv_main"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/main_btn_load_operation"
+        app:layout_constraintBottom_toTopOf="@id/main_btn_load_operation_camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/i_main" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/main_btn_load_operation"
+        android:id="@+id/main_btn_load_operation_camera"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hitung dengan pindai"
+        android:text="Scan with Camera"
         app:layout_constraintBottom_toTopOf="@+id/main_layout_radio_group"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/main_btn_load_operation_gallery" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/main_btn_load_operation_gallery"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Scan with Gallery"
+        app:layout_constraintBottom_toBottomOf="@id/main_btn_load_operation_camera"
+        app:layout_constraintEnd_toStartOf="@id/main_btn_load_operation_camera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/main_btn_load_operation_camera" />
 
     <RadioGroup
         android:id="@+id/main_layout_radio_group"

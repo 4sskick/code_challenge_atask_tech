@@ -37,12 +37,7 @@ android {
         exclude 'META-INF/LGPL2.1'
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -53,6 +48,31 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+
+
+    flavorDimensions 'default'
+    productFlavors {
+        red {
+            dimension 'default'
+            applicationIdSuffix ".red"
+            versionNameSuffix "-red"
+        }
+
+        green {
+            dimension 'default'
+            applicationIdSuffix ".green"
+            versionNameSuffix "-green"
+        }
+    }
+
+    buildTypes {
+        filesystem {
+
+        }
+        built_in_camera {
+
+        }
     }
 }
 
