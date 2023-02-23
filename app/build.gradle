@@ -67,12 +67,48 @@ android {
     }
 
     buildTypes {
+//        release {
+//            debuggable false
+//            minifyEnabled true
+////            signingConfig signingConfigs.release
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+//        debug {
+//            debuggable true
+//            minifyEnabled false
+////            signingConfig signingConfigs.debug
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+
         filesystem {
 
-        }
-        built_in_camera {
+            debuggable true
+            minifyEnabled false
+//            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
+            applicationIdSuffix ".filesystem"
         }
+
+        builtincamera {
+            getIsDefault().set(true)
+
+            debuggable true
+            minifyEnabled false
+//            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationIdSuffix ".built_in_camera"
+        }
+    }
+
+}
+
+
+//disabled default build type (release & debug)
+android.variantFilter { variant ->
+    if (variant.buildType.name == 'release' || variant.buildType.name == 'debug') {
+        variant.setIgnore(true);
     }
 }
 

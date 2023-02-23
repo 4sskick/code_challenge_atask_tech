@@ -2,6 +2,7 @@ package id.niteroomcreation.calculatorcamera.feature.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -53,5 +54,8 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
+        return super.onCreateOptionsMenu(menu)
+    }
 }
