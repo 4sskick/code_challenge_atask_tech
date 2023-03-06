@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -48,20 +49,13 @@ class MainActivity : AppCompatActivity() {
                 if (it.resultCode == Activity.RESULT_OK) {
                     var data: String = it.data?.extras?.get(ScanActivity.SCAN_DATA) as String
 
-                    LogHelper.e(TAG, "before: data $data")
+                    LogHelper.e(TAG, "before: data $data data contain '=' ${data.contains('=')}")
 
-                    if (data.contains("\\=")) {
-                        data = data.split("\\=")[0]
+                    if (data.contains('=')) {
+                        data = data.split('=')[0]
+
+                        LogHelper.e(TAG, "proceed into $data")
                     }
-
-                    data = data.filter {
-                        !it.isWhitespace()
-                    }.also {
-                        it.lowercase()
-                    }
-
-                    if (data.contains('='))
-                        data = data.split("=")[0]
 
                     LogHelper.e(TAG, "after data $data")
 
@@ -71,31 +65,33 @@ class MainActivity : AppCompatActivity() {
                     var result = 0
 
                     if (data.contains('+')) {
-                        firstNum = data.split("+")[0].toInt()
-                        secNum = data.split("+")[1].toInt()
+                        firstNum = data.split('+')[0].toInt()
+                        secNum = data.split('+')[1].toInt()
                         result = Math.addExact(firstNum, secNum)
 
                     } else if (data.contains('-')) {
-                        firstNum = data.split("-")[0].toInt()
-                        secNum = data.split("-")[1].toInt()
+                        firstNum = data.split('-')[0].toInt()
+                        secNum = data.split('-')[1].toInt()
                         result = Math.subtractExact(firstNum, secNum)
 
                     } else if (data.contains('x')) {
 
-                        firstNum = data.split("x")[0].toInt()
-                        secNum = data.split("x")[1].toInt()
+                        firstNum = data.split('x')[0].toInt()
+                        secNum = data.split('x')[1].toInt()
                         result = Math.multiplyExact(firstNum, secNum)
 
                     } else if (data.contains(':')) {
-                        firstNum = data.split(":")[0].toInt()
-                        secNum = data.split(":")[1].toInt()
+                        firstNum = data.split(':')[0].toInt()
+                        secNum = data.split(':')[1].toInt()
                         result = Math.floorDiv(firstNum, secNum)
                     }
 
                     LogHelper.e(TAG, "onCreate: result gonna be $result")
+                    Toast.makeText(this, "result gonna be $result", Toast.LENGTH_LONG).show()
 
                 } else {
                     LogHelper.e(TAG, "onCreate: CANCELED")
+                    Toast.makeText(this, "Scan CANCELED", Toast.LENGTH_LONG).show()
                 }
             }
 

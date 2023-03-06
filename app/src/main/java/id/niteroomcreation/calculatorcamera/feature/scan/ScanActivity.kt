@@ -20,6 +20,7 @@ class ScanActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: AScanBinding
+    private lateinit var scanOutput: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,14 +32,8 @@ class ScanActivity : AppCompatActivity() {
             override fun onDetected(detections: String) {
                 Log.e(TAG, "onDetected: $detections")
 
-                Intent().apply {
-                    putExtra(SCAN_DATA, detections)
-
-                    Log.e(TAG, "onDetected: before sent ${this.extras}")
-
-                    setResult(Activity.RESULT_OK, this)
-                    finish()
-                }
+                scanOutput = detections.filter { !it.isWhitespace() }.apply { lowercase() }
+                binding.scanText.text = scanOutput
 
             }
 
@@ -46,5 +41,16 @@ class ScanActivity : AppCompatActivity() {
                 Log.e(TAG, "onStateChanged: state: $state, code: $i")
             }
         })
+
+        binding.scanButtonTake.setOnClickListener {
+            Intent().apply {
+                putExtra(SCAN_DATA, scanOutput)
+
+                Log.e(TAG, "onDetected: before sent ${this.extras}")
+
+                setResult(Activity.RESULT_OK, this)
+                finish()
+            }
+        }
     }
 }
