@@ -1,13 +1,19 @@
 package id.niteroomcreation.calculatorcamera.feature.main
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import id.niteroomcreation.archcomponent.util.LogHelper
 import id.niteroomcreation.calculatorcamera.databinding.AMainBinding
+import id.niteroomcreation.calculatorcamera.feature.scan.ScanActivity
 import id.niteroomcreation.calculatorcamera.util.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +41,68 @@ class MainActivity : AppCompatActivity() {
 
         setupObserver()
         setupAdapter()
+
+        val scanRequest: ActivityResultLauncher<Intent> =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+                if (it.resultCode == Activity.RESULT_OK) {
+                    var data: String = it.data?.extras?.get(ScanActivity.SCAN_DATA) as String
+
+                    LogHelper.e(TAG, "before: data $data")
+
+                    if (data.contains("\\=")) {
+                        data = data.split("\\=")[0]
+                    }
+
+                    data = data.filter {
+                        !it.isWhitespace()
+                    }.also {
+                        it.lowercase()
+                    }
+
+                    if (data.contains('='))
+                        data = data.split("=")[0]
+
+                    LogHelper.e(TAG, "after data $data")
+
+                    //begin to process expression
+                    var firstNum = 0
+                    var secNum = 0
+                    var result = 0
+
+                    if (data.contains('+')) {
+                        firstNum = data.split("+")[0].toInt()
+                        secNum = data.split("+")[1].toInt()
+                        result = Math.addExact(firstNum, secNum)
+
+                    } else if (data.contains('-')) {
+                        firstNum = data.split("-")[0].toInt()
+                        secNum = data.split("-")[1].toInt()
+                        result = Math.subtractExact(firstNum, secNum)
+
+                    } else if (data.contains('x')) {
+
+                        firstNum = data.split("x")[0].toInt()
+                        secNum = data.split("x")[1].toInt()
+                        result = Math.multiplyExact(firstNum, secNum)
+
+                    } else if (data.contains(':')) {
+                        firstNum = data.split(":")[0].toInt()
+                        secNum = data.split(":")[1].toInt()
+                        result = Math.floorDiv(firstNum, secNum)
+                    }
+
+                    LogHelper.e(TAG, "onCreate: result gonna be $result")
+
+                } else {
+                    LogHelper.e(TAG, "onCreate: CANCELED")
+                }
+            }
+
+        binding.mainBtnLoadOperationCamera.setOnClickListener {
+            scanRequest.launch(Intent(this, ScanActivity::class.java))
+        }
+
     }
 
     private fun setupAdapter() {

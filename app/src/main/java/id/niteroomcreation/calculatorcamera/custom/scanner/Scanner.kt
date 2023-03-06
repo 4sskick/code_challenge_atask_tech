@@ -9,6 +9,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.util.valueIterator
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.text.TextBlock
@@ -17,6 +18,8 @@ import com.google.android.gms.vision.text.TextRecognizer
 /**
  * Created by Septian Adi Wijaya on 02/03/2023.
  * please be sure to add credential if you use people's code
+ *
+ * credit:
  */
 class Scanner() {
 
@@ -133,10 +136,9 @@ class Scanner() {
 
                     var stringBuilder = StringBuilder()
 
-                    var ind = 0
-                    while (ind < items.size()) {
-                        var item: TextBlock = items.valueAt(ind)
+                    for (item in items.valueIterator()) {
                         stringBuilder.append(item.value).append("\n")
+
                     }
 
                     act.runOnUiThread({ listener.onDetected(stringBuilder.toString()) })
