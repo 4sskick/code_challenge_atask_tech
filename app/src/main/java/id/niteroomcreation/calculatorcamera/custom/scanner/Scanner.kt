@@ -3,6 +3,7 @@ package id.niteroomcreation.calculatorcamera.custom.scanner
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
@@ -12,8 +13,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.util.valueIterator
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
+import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
+
 
 /**
  * Created by Septian Adi Wijaya on 02/03/2023.
@@ -26,6 +29,9 @@ class Scanner() {
     companion object {
         val REQUEST_CAMERA = 12
         val TAG = Scanner::class.java.simpleName
+
+        val MODE_DEFAULT = "mode.default"
+        val MODE_IMAGE = "mode.image"
     }
 
     private lateinit var act: Activity
@@ -33,6 +39,8 @@ class Scanner() {
     private lateinit var listener: ScannerListener
     private var showToast: Boolean = true
     private var scanning: Boolean = false
+    private var mode: String = MODE_DEFAULT
+    private var bitmap: Bitmap? = null
     var state: String = "loading"
 
     constructor(act: Activity, surfaceView: SurfaceView) : this() {
@@ -52,6 +60,22 @@ class Scanner() {
         scan()
     }
 
+    constructor(
+        act: Activity,
+        scannerView: SurfaceView,
+        mode: String,
+        bitmap: Bitmap?,
+        scannerListener: ScannerListener
+    ) : this() {
+        this.act = act
+        this.mode = mode
+        this.bitmap = bitmap
+
+        setSurfaceView(surfaceView = scannerView)
+        setListener(scannerListener)
+        scan()
+    }
+
     fun setSurfaceView(surfaceView: SurfaceView) {
         this.camera = surfaceView
     }
@@ -61,7 +85,76 @@ class Scanner() {
     }
 
     fun scan() {
-        prepareScanning()
+        when (mode) {
+            MODE_DEFAULT -> {
+                prepareScanning()
+            }
+            MODE_IMAGE -> {
+                prepareScanningImage()
+            }
+        }
+    }
+
+    private fun prepareScanningImage() {
+        var textRecognizer = TextRecognizer.Builder(act).build()
+
+        if (!textRecognizer.isOperational) {
+            state = "OCR not ready yet"
+
+            Toast.makeText(act, state, Toast.LENGTH_LONG).show()
+            Log.e(TAG, "prepareScanning: $state")
+
+            listener.onStateChanged(state, 3)
+        }
+
+
+        val imageFrame: Frame = Frame.Builder()
+            .setBitmap(bitmap) // your image bitmap
+            .build()
+
+        var stringBuilder = StringBuilder()
+        val textBlocks = textRecognizer.detect(imageFrame)
+
+        state = "running"
+        listener.onStateChanged(state, 1)
+
+
+        for (i in 0 until textBlocks.size()) {
+            val item = textBlocks[textBlocks.keyAt(i)]
+            stringBuilder.append(item.value).append("\n")
+//            imageText = item.value // return string
+        }
+
+        act.runOnUiThread { listener.onDetected(stringBuilder.toString()) }
+        Log.e(TAG, "receiveDetections: $stringBuilder")
+
+
+//        textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
+//            override fun release() {
+//                //do nothing
+//            }
+//
+//            override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
+//                state = "running"
+//                listener.onStateChanged(state, 1)
+//
+//                var items: SparseArray<TextBlock> = detections.detectedItems
+//
+//                if (items.size() != 0) {
+//
+//                    var stringBuilder = StringBuilder()
+//
+//                    for (item in items.valueIterator()) {
+//                        stringBuilder.append(item.value).append("\n")
+//
+//                    }
+//
+//                    act.runOnUiThread { listener.onDetected(stringBuilder.toString()) }
+//                    Log.e(TAG, "receiveDetections: $stringBuilder")
+//                }
+//            }
+//
+//        })
     }
 
     private fun prepareScanning() {
@@ -149,15 +242,15 @@ class Scanner() {
         })
     }
 
-    fun setScanning(scanning: Boolean) {
-        if (scanning) {
-            prepareScanning()
-            this.scanning = true
-        } else {
-            @Suppress("DEPRECATION")
-            camera.destroyDrawingCache()
-            this.scanning = false
-        }
-    }
+//    fun setScanning(scanning: Boolean) {
+//        if (scanning) {
+//            prepareScanning()
+//            this.scanning = true
+//        } else {
+//            @Suppress("DEPRECATION")
+//            camera.destroyDrawingCache()
+//            this.scanning = false
+//        }
+//    }
 
 }

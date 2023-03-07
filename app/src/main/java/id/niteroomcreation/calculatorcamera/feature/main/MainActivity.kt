@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setupObserver()
         setupAdapter()
 
+
         val scanRequest: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 
@@ -95,8 +96,23 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+        val imageRequest = registerForActivityResult(ActivityResultContracts.GetContent()) {
+            LogHelper.e(TAG, it)
+
+            scanRequest.launch(Intent(this, ScanActivity::class.java).apply {
+                putExtra(ScanActivity.SCAN_MODE, false)
+                putExtra(ScanActivity.URI_DATA, it)
+            })
+        }
+
         binding.mainBtnLoadOperationCamera.setOnClickListener {
-            scanRequest.launch(Intent(this, ScanActivity::class.java))
+            scanRequest.launch(Intent(this, ScanActivity::class.java).apply {
+                putExtra(ScanActivity.SCAN_MODE, true)
+            })
+        }
+
+        binding.mainBtnLoadOperationGallery.setOnClickListener {
+            imageRequest.launch("image/*")
         }
 
     }

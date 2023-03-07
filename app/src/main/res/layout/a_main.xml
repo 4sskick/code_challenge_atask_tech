@@ -21,6 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Scan with Camera"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/main_layout_radio_group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/main_btn_load_operation_gallery" />
@@ -31,6 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Scan with Gallery"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/main_btn_load_operation_camera"
         app:layout_constraintEnd_toStartOf="@id/main_btn_load_operation_camera"
         app:layout_constraintStart_toStartOf="parent"
