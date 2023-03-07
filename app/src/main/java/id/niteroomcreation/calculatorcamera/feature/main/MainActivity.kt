@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,6 +44,14 @@ class MainActivity : AppCompatActivity() {
         setupObserver()
         setupAdapter()
 
+        binding.mainLayoutRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            val radioSelect = findViewById<RadioButton>(checkedId)
+            LogHelper.e(TAG, "select on ${radioSelect.text}")
+        }
+
+        var currentRadioSelected =
+            binding.mainLayoutRadioGroup.findViewById(binding.mainLayoutRadioGroup.checkedRadioButtonId) as RadioButton
+        LogHelper.e(TAG, "current selected radio button ${currentRadioSelected.text}")
 
         val scanRequest: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {

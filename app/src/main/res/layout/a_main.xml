@@ -42,16 +42,19 @@
         android:id="@+id/main_layout_radio_group"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:checkedButton="@id/main_radio_file"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <RadioButton
+            android:id="@+id/main_radio_file"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Load from file storage" />
 
         <RadioButton
+            android:id="@+id/main_radio_db"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Load from Database" />

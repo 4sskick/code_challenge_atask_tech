@@ -57,30 +57,24 @@ android {
             dimension 'default'
             applicationIdSuffix ".red"
             versionNameSuffix "-red"
+
+            manifestPlaceholders = [appName: "red"]
+
         }
 
         green {
             dimension 'default'
             applicationIdSuffix ".green"
             versionNameSuffix "-green"
+
+            manifestPlaceholders = [appName: "green"]
         }
     }
 
     buildTypes {
-//        release {
-//            debuggable false
-//            minifyEnabled true
-////            signingConfig signingConfigs.release
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//        }
-//        debug {
-//            debuggable true
-//            minifyEnabled false
-////            signingConfig signingConfigs.debug
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//        }
 
         filesystem {
+            manifestPlaceholders = [appNameSuffix: "fileSystem"]
 
             debuggable true
             minifyEnabled false
@@ -92,6 +86,7 @@ android {
 
         builtincamera {
             getIsDefault().set(true)
+            manifestPlaceholders = [appNameSuffix: "builtCamera"]
 
             debuggable true
             minifyEnabled false
