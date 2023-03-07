@@ -4,11 +4,14 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Rect
+import android.os.Build
 import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.util.valueIterator
 import com.google.android.gms.vision.CameraSource
@@ -107,10 +110,44 @@ class Scanner() {
             listener.onStateChanged(state, 3)
         }
 
-
         val imageFrame: Frame = Frame.Builder()
             .setBitmap(bitmap) // your image bitmap
             .build()
+
+        camera.holder.addCallback(object : SurfaceHolder.Callback {
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun surfaceCreated(holder: SurfaceHolder) {
+                var canvas = holder.lockCanvas()
+                var rect: Rect = Rect()
+
+                rect.set(0, 0, canvas.width, canvas.height);
+                try {
+                    synchronized(holder) {
+                        canvas.drawBitmap(bitmap!!, null, rect, null)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    if (canvas != null) {
+                        holder.unlockCanvasAndPost(canvas)
+                    }
+                }
+            }
+
+            override fun surfaceChanged(
+                holder: SurfaceHolder,
+                format: Int,
+                width: Int,
+                height: Int
+            ) {
+//                TODO("Not yet implemented")
+            }
+
+            override fun surfaceDestroyed(holder: SurfaceHolder) {
+//                TODO("Not yet implemented")
+            }
+
+        })
 
         var stringBuilder = StringBuilder()
         val textBlocks = textRecognizer.detect(imageFrame)
@@ -128,33 +165,6 @@ class Scanner() {
         act.runOnUiThread { listener.onDetected(stringBuilder.toString()) }
         Log.e(TAG, "receiveDetections: $stringBuilder")
 
-
-//        textRecognizer.setProcessor(object : Detector.Processor<TextBlock> {
-//            override fun release() {
-//                //do nothing
-//            }
-//
-//            override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
-//                state = "running"
-//                listener.onStateChanged(state, 1)
-//
-//                var items: SparseArray<TextBlock> = detections.detectedItems
-//
-//                if (items.size() != 0) {
-//
-//                    var stringBuilder = StringBuilder()
-//
-//                    for (item in items.valueIterator()) {
-//                        stringBuilder.append(item.value).append("\n")
-//
-//                    }
-//
-//                    act.runOnUiThread { listener.onDetected(stringBuilder.toString()) }
-//                    Log.e(TAG, "receiveDetections: $stringBuilder")
-//                }
-//            }
-//
-//        })
     }
 
     private fun prepareScanning() {
