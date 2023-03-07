@@ -2,6 +2,7 @@ package id.niteroomcreation.calculatorcamera.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import id.niteroomcreation.calculatorcamera.domain.di.Injector
 import id.niteroomcreation.calculatorcamera.feature.main.MainViewModel
 
 /**
@@ -25,7 +26,7 @@ class ViewModelFactory : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
         if (modelClass.isAssignableFrom(MainViewModel::class.java))
-            return MainViewModel() as T
+            return MainViewModel(Injector.provideRepository()) as T
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

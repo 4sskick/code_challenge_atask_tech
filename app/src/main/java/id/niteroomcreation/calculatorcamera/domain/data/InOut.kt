@@ -1,4 +1,4 @@
-package id.niteroomcreation.calculatorcamera.domain
+package id.niteroomcreation.calculatorcamera.domain.data
 
 /**
  * Created by Septian Adi Wijaya on 22/02/2023.

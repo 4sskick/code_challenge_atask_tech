@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import id.niteroomcreation.calculatorcamera.databinding.IMainBinding
-import id.niteroomcreation.calculatorcamera.domain.InOut
+import id.niteroomcreation.calculatorcamera.domain.data.InOut
 
 /**
  * Created by Septian Adi Wijaya on 23/02/2023.

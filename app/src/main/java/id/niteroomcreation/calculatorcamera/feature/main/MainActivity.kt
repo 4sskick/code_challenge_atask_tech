@@ -24,6 +24,12 @@ class MainActivity : AppCompatActivity() {
         val TAG = MainActivity::class.java.simpleName
     }
 
+    private val currentRadioSelected: RadioButton by lazy{
+         binding.mainLayoutRadioGroup.findViewById(
+            binding.mainLayoutRadioGroup.checkedRadioButtonId
+        ) as RadioButton
+    }
+
     private val mainViewModel by lazy {
         ViewModelProvider(
             owner = this,
@@ -41,6 +47,10 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+//        currentRadioSelected = binding.mainLayoutRadioGroup.findViewById(
+//            binding.mainLayoutRadioGroup.checkedRadioButtonId
+//        ) as RadioButton
+
         setupObserver()
         setupAdapter()
 
@@ -49,8 +59,8 @@ class MainActivity : AppCompatActivity() {
             LogHelper.e(TAG, "select on ${radioSelect.text}")
         }
 
-        var currentRadioSelected =
-            binding.mainLayoutRadioGroup.findViewById(binding.mainLayoutRadioGroup.checkedRadioButtonId) as RadioButton
+
+
         LogHelper.e(TAG, "current selected radio button ${currentRadioSelected.text}")
 
         val scanRequest: ActivityResultLauncher<Intent> =
@@ -141,6 +151,14 @@ class MainActivity : AppCompatActivity() {
 
             adapter.submit(it)
         })
+
+
+
+        if (currentRadioSelected.text.contains("storage")) {
+            //gonna load data from file been written on internal dir 'data'
+            mainViewModel.dataInternal()
+        } else
+            mainViewModel.dataDB()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
