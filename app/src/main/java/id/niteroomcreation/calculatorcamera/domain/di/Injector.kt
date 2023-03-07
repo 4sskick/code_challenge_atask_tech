@@ -1,5 +1,7 @@
 package id.niteroomcreation.calculatorcamera.domain.di
 
+import android.content.Context
+import id.niteroomcreation.calculatorcamera.CalculatorApp
 import id.niteroomcreation.calculatorcamera.domain.repositories.Repository
 
 /**
@@ -10,5 +12,9 @@ object Injector {
 
     fun provideRepository(): Repository {
         return Repository()
+    }
+
+    fun provideContext(): Context {
+        return CalculatorApp.getContext()
     }
 }

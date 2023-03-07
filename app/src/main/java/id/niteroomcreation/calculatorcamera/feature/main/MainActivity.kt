@@ -3,7 +3,6 @@ package id.niteroomcreation.calculatorcamera.feature.main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.widget.RadioButton
 import android.widget.Toast
@@ -24,8 +23,8 @@ class MainActivity : AppCompatActivity() {
         val TAG = MainActivity::class.java.simpleName
     }
 
-    private val currentRadioSelected: RadioButton by lazy{
-         binding.mainLayoutRadioGroup.findViewById(
+    private val currentRadioSelected: RadioButton by lazy {
+        binding.mainLayoutRadioGroup.findViewById(
             binding.mainLayoutRadioGroup.checkedRadioButtonId
         ) as RadioButton
     }
@@ -55,13 +54,13 @@ class MainActivity : AppCompatActivity() {
         setupAdapter()
 
         binding.mainLayoutRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            val radioSelect = findViewById<RadioButton>(checkedId)
-            LogHelper.e(TAG, "select on ${radioSelect.text}")
+            val rSelect = findViewById<RadioButton>(checkedId)
+
+            if (rSelect.text.contains("storage")) {
+                mainViewModel.dataInternal()
+            } else
+                mainViewModel.dataDB()
         }
-
-
-
-        LogHelper.e(TAG, "current selected radio button ${currentRadioSelected.text}")
 
         val scanRequest: ActivityResultLauncher<Intent> =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -147,12 +146,11 @@ class MainActivity : AppCompatActivity() {
     private fun setupObserver() {
         mainViewModel.data.observe(this, Observer {
 
-            Log.e(TAG, "setupObserver: " + it)
+            LogHelper.e(TAG, it)
 
             adapter.submit(it)
+            adapter.notifyDataSetChanged()
         })
-
-
 
         if (currentRadioSelected.text.contains("storage")) {
             //gonna load data from file been written on internal dir 'data'
