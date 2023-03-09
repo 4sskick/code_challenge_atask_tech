@@ -5,10 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import id.niteroomcreation.calculatorcamera.databinding.AScanBinding
 import id.niteroomcreation.calculatorcamera.presenter.util.view_custom.scanner.Scanner
 import id.niteroomcreation.calculatorcamera.presenter.util.view_custom.scanner.ScannerListener
-import id.niteroomcreation.calculatorcamera.databinding.AScanBinding
 
 /**
  * Created by Septian Adi Wijaya on 03/03/2023.
@@ -46,6 +47,9 @@ class ScanActivity : AppCompatActivity() {
                     Log.e(TAG, "onDetected: $detections")
 
                     scanOutput = detections.filter { !it.isWhitespace() }.apply { lowercase() }
+                    if (scanOutput.contains('='))
+                        scanOutput = scanOutput.split('=')[0]
+
                     binding.scanText.text = scanOutput
 
                 }
@@ -57,12 +61,29 @@ class ScanActivity : AppCompatActivity() {
 
         binding.scanButtonTake.setOnClickListener {
             Intent().apply {
-                putExtra(SCAN_DATA, scanOutput)
 
-                Log.e(TAG, "onDetected: before sent ${this.extras}")
+                if (this@ScanActivity::scanOutput.isInitialized &&
+                    "[1-9-+/:x=]+".toRegex().matches(scanOutput)
+                ) {
 
-                setResult(Activity.RESULT_OK, this)
-                finish()
+                    putExtra(SCAN_DATA, scanOutput)
+
+                    Log.e(TAG, "onDetected: before sent ${this.extras}")
+
+                    setResult(Activity.RESULT_OK, this)
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this@ScanActivity,
+                        "Ekspresi tidak valid",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    if (binding.scanText.text.equals("output: %s")) {
+                        setResult(Activity.RESULT_CANCELED)
+                        finish()
+                    }
+                }
             }
         }
     }

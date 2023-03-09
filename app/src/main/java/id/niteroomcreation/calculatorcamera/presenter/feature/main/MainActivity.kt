@@ -68,45 +68,55 @@ class MainActivity : AppCompatActivity() {
                 if (it.resultCode == Activity.RESULT_OK) {
                     var data: String = it.data?.extras?.get(ScanActivity.SCAN_DATA) as String
 
-                    LogHelper.e(TAG, "before: data $data data contain '=' ${data.contains('=')}")
+                    LogHelper.e(TAG, "before: data $data")
 
-                    if (data.contains('=')) {
-                        data = data.split('=')[0]
+                    try {
 
-                        LogHelper.e(TAG, "proceed into $data")
+                        //begin to process expression
+                        var firstNum = 0
+                        var secNum = 0
+                        var result = 0
+
+                        if (data.contains('+')) {
+                            firstNum = data.split('+')[0].toInt()
+                            secNum = data.split('+')[1].toInt()
+                            result = Math.addExact(firstNum, secNum)
+
+                        } else if (data.contains('-')) {
+                            firstNum = data.split('-')[0].toInt()
+                            secNum = data.split('-')[1].toInt()
+                            result = Math.subtractExact(firstNum, secNum)
+
+                        } else if (data.contains('x')) {
+
+                            firstNum = data.split('x')[0].toInt()
+                            secNum = data.split('x')[1].toInt()
+                            result = Math.multiplyExact(firstNum, secNum)
+
+                        } else if (data.contains(':')) {
+                            firstNum = data.split(':')[0].toInt()
+                            secNum = data.split(':')[1].toInt()
+                            result = Math.floorDiv(firstNum, secNum)
+
+                        } else if (data.contains('/')) {
+                            firstNum = data.split('/')[0].toInt()
+                            secNum = data.split('/')[1].toInt()
+                            result = Math.floorDiv(firstNum, secNum)
+                        }
+
+                        LogHelper.e(TAG, "onCreate: result gonna be $result")
+                        Toast.makeText(this, "result gonna be $result", Toast.LENGTH_LONG)
+                            .show()
+
+                        //expect everything that no crash is a success operation even the result is zero or expression's result not correct
+                        //begin to post
+                        mainViewModel.postInternal(
+                            inStr = data,
+                            outStr = "$result"
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-
-                    LogHelper.e(TAG, "after data $data")
-
-                    //begin to process expression
-                    var firstNum = 0
-                    var secNum = 0
-                    var result = 0
-
-                    if (data.contains('+')) {
-                        firstNum = data.split('+')[0].toInt()
-                        secNum = data.split('+')[1].toInt()
-                        result = Math.addExact(firstNum, secNum)
-
-                    } else if (data.contains('-')) {
-                        firstNum = data.split('-')[0].toInt()
-                        secNum = data.split('-')[1].toInt()
-                        result = Math.subtractExact(firstNum, secNum)
-
-                    } else if (data.contains('x')) {
-
-                        firstNum = data.split('x')[0].toInt()
-                        secNum = data.split('x')[1].toInt()
-                        result = Math.multiplyExact(firstNum, secNum)
-
-                    } else if (data.contains(':')) {
-                        firstNum = data.split(':')[0].toInt()
-                        secNum = data.split(':')[1].toInt()
-                        result = Math.floorDiv(firstNum, secNum)
-                    }
-
-                    LogHelper.e(TAG, "onCreate: result gonna be $result")
-                    Toast.makeText(this, "result gonna be $result", Toast.LENGTH_LONG).show()
 
                 } else {
                     LogHelper.e(TAG, "onCreate: CANCELED")

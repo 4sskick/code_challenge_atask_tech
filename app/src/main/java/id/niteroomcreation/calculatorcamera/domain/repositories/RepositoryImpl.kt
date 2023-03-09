@@ -9,5 +9,7 @@ import id.niteroomcreation.calculatorcamera.domain.entity.InOut
 interface RepositoryImpl {
 
     suspend fun getFromDB(): List<InOut>
-    suspend fun getFromInternal(): List<InOut>
+    suspend fun getFromInternal(): ArrayList<InOut>
+    suspend fun postToDB()
+    suspend fun postToInternal(inStr: String, outStr: String)
 }

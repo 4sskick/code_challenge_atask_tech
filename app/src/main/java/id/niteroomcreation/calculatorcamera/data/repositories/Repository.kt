@@ -10,6 +10,8 @@ import id.niteroomcreation.calculatorcamera.data.sources.local.CalculatorCameraD
 import id.niteroomcreation.calculatorcamera.di.Injector
 import id.niteroomcreation.calculatorcamera.domain.entity.InOut
 import id.niteroomcreation.calculatorcamera.domain.repositories.RepositoryImpl
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
@@ -25,6 +27,8 @@ class Repository(private val database: CalculatorCameraDatabase) : RepositoryImp
         val TAG = Repository::class.java.simpleName
     }
 
+    var gson = GsonBuilder().create()
+
     override suspend fun getFromDB(): List<InOut> {
         return database.inOutDao()
             .getAll()
@@ -34,14 +38,13 @@ class Repository(private val database: CalculatorCameraDatabase) : RepositoryImp
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun getFromInternal(): List<InOut> {
+    override suspend fun getFromInternal(): ArrayList<InOut> {
 
         //load data to read from file
         //if doesn't create yet, init process & return empty
         //otherwise, read data -> decode from base 64 -> json mapping into list -> return
 
-        var result = emptyList<InOut>()
-        var gson = GsonBuilder().create()
+        var result = ArrayList<InOut>()
 
         try {
             var fileInputStream = Injector.provideContext().openFileInput("internal.txt")
@@ -69,8 +72,8 @@ class Repository(private val database: CalculatorCameraDatabase) : RepositoryImp
             LogHelper.e(TAG, "file content", stringBuilder, "after decode", decodeValue)
 
             //json mapping
-            val itemType = object : TypeToken<List<InOut>>() {}.type
-            result = gson.fromJson<List<InOut>>(decodeValue, itemType)
+            val itemType = object : TypeToken<ArrayList<InOut>>() {}.type
+            result = gson.fromJson(decodeValue, itemType)
 
             LogHelper.e(TAG, "result gonna be", result)
 
@@ -79,24 +82,28 @@ class Repository(private val database: CalculatorCameraDatabase) : RepositoryImp
             //by write an empty
             try {
                 val fileOutputStream = Injector.provideContext()
-                    .openFileOutput("internal.txt", Context.MODE_PRIVATE)
+                    .openFileOutput(
+                        "internal.txt",
+                        Context.MODE_PRIVATE
+                    )
 
                 //convert into json
-                val temp = gson.toJson(
-                    listOf<InOut>(
-                        InOut("2+3", "5"),
-                        InOut("3+4", "7"),
-                        InOut("56x4", "224"),
-                    )
+                result = arrayListOf(
+                    InOut("2+3", "5"),
+                    InOut("3+4", "7"),
+                    InOut("56x4", "224"),
                 )
+                val temp = gson.toJson(result)
 
-//                val encodeValue = Base64.getEncoder().encodeToString(temp.toByteArray())
                 val encodeValue =
                     android.util.Base64.encode(
                         temp.toByteArray(),
                         android.util.Base64.DEFAULT
                     )
-                fileOutputStream.write(encodeValue)
+
+                withContext(Dispatchers.IO) {
+                    fileOutputStream.write(encodeValue)
+                }
 
                 LogHelper.e(TAG, "list gonna encode", temp, "encode to", encodeValue)
 
@@ -108,5 +115,39 @@ class Repository(private val database: CalculatorCameraDatabase) : RepositoryImp
         }
 
         return result
+    }
+
+    override suspend fun postToDB() {
+//        TODO("Not yet implemented")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun postToInternal(inStr: String, outStr: String) {
+        try {
+            var existing = getFromInternal()
+            existing.add(InOut(inStr, outStr))
+
+            val temp = gson.toJson(existing)
+            val encodeValue =
+                android.util.Base64.encode(
+                    temp.toByteArray(),
+                    android.util.Base64.DEFAULT
+                )
+
+            val fileOutputStream = Injector.provideContext()
+                .openFileOutput(
+                    "internal.txt",
+                    Context.MODE_PRIVATE
+                )
+
+            withContext(Dispatchers.IO) {
+                fileOutputStream.write(encodeValue)
+            }
+
+            LogHelper.e(TAG, "list gonna encode", temp, "encode to", encodeValue)
+
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        }
     }
 }

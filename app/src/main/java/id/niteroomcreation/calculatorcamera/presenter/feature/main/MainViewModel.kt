@@ -28,8 +28,21 @@ class MainViewModel(private val repo: RepositoryImpl) : ViewModel() {
     }
 
     fun dataDB() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             data_.postValue(repo.getFromDB())
+        }
+    }
+
+    fun postDataDB() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.postToDB()
+        }
+    }
+
+    fun postInternal(inStr: String, outStr: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.postToInternal(inStr, outStr)
+            dataInternal()
         }
     }
 
