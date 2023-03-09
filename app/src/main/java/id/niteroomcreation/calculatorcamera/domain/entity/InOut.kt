@@ -1,4 +1,4 @@
-package id.niteroomcreation.calculatorcamera.domain.data
+package id.niteroomcreation.calculatorcamera.domain.entity
 
 import com.google.gson.annotations.SerializedName
 

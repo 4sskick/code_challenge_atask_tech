@@ -1,4 +1,4 @@
-package id.niteroomcreation.calculatorcamera.feature.main
+package id.niteroomcreation.calculatorcamera.presenter.feature.main
 
 import android.app.Activity
 import android.content.Intent
@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.niteroomcreation.archcomponent.util.LogHelper
 import id.niteroomcreation.calculatorcamera.databinding.AMainBinding
-import id.niteroomcreation.calculatorcamera.feature.scan.ScanActivity
-import id.niteroomcreation.calculatorcamera.util.ViewModelFactory
+import id.niteroomcreation.calculatorcamera.presenter.feature.scan.ScanActivity
+import id.niteroomcreation.calculatorcamera.presenter.util.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 

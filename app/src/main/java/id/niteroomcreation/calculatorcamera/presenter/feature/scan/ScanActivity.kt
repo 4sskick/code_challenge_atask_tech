@@ -1,4 +1,4 @@
-package id.niteroomcreation.calculatorcamera.feature.scan
+package id.niteroomcreation.calculatorcamera.presenter.feature.scan
 
 import android.app.Activity
 import android.content.Intent
@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import id.niteroomcreation.calculatorcamera.custom.scanner.Scanner
-import id.niteroomcreation.calculatorcamera.custom.scanner.ScannerListener
+import id.niteroomcreation.calculatorcamera.presenter.util.view_custom.scanner.Scanner
+import id.niteroomcreation.calculatorcamera.presenter.util.view_custom.scanner.ScannerListener
 import id.niteroomcreation.calculatorcamera.databinding.AScanBinding
 
 /**

@@ -1,8 +1,8 @@
-package id.niteroomcreation.calculatorcamera.domain.di
+package id.niteroomcreation.calculatorcamera.di
 
 import android.content.Context
 import id.niteroomcreation.calculatorcamera.CalculatorApp
-import id.niteroomcreation.calculatorcamera.domain.repositories.Repository
+import id.niteroomcreation.calculatorcamera.data.repositories.Repository
 
 /**
  * Created by Septian Adi Wijaya on 08/03/2023.

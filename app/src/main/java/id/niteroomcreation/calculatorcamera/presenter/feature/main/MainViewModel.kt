@@ -1,10 +1,11 @@
-package id.niteroomcreation.calculatorcamera.feature.main
+package id.niteroomcreation.calculatorcamera.presenter.feature.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import id.niteroomcreation.calculatorcamera.domain.data.InOut
+import id.niteroomcreation.calculatorcamera.domain.entity.InOut
 import id.niteroomcreation.calculatorcamera.domain.repositories.RepositoryImpl
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -21,7 +22,7 @@ class MainViewModel(private val repo: RepositoryImpl) : ViewModel() {
     }
 
     fun dataInternal() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             data_.postValue(repo.getFromInternal())
         }
     }

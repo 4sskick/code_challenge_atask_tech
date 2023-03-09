@@ -1,9 +1,9 @@
-package id.niteroomcreation.calculatorcamera.util
+package id.niteroomcreation.calculatorcamera.presenter.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import id.niteroomcreation.calculatorcamera.domain.di.Injector
-import id.niteroomcreation.calculatorcamera.feature.main.MainViewModel
+import id.niteroomcreation.calculatorcamera.di.Injector
+import id.niteroomcreation.calculatorcamera.presenter.feature.main.MainViewModel
 
 /**
  * Created by Septian Adi Wijaya on 22/02/2023.

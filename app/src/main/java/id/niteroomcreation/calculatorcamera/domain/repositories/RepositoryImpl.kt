@@ -1,7 +1,6 @@
 package id.niteroomcreation.calculatorcamera.domain.repositories
 
-import androidx.lifecycle.LiveData
-import id.niteroomcreation.calculatorcamera.domain.data.InOut
+import id.niteroomcreation.calculatorcamera.domain.entity.InOut
 
 /**
  * Created by Septian Adi Wijaya on 08/03/2023.

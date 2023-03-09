@@ -1,8 +1,8 @@
-package id.niteroomcreation.calculatorcamera.util
+package id.niteroomcreation.calculatorcamera.presenter.util
 
 import android.app.Activity
 import android.content.Intent
-import id.niteroomcreation.calculatorcamera.feature.main.MainActivity
+import id.niteroomcreation.calculatorcamera.presenter.feature.main.MainActivity
 
 /**
  * Created by Septian Adi Wijaya on 22/02/2023.

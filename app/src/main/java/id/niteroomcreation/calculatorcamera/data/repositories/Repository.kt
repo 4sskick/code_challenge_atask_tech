@@ -1,4 +1,4 @@
-package id.niteroomcreation.calculatorcamera.domain.repositories
+package id.niteroomcreation.calculatorcamera.data.repositories
 
 import android.content.Context
 import android.os.Build
@@ -6,8 +6,9 @@ import androidx.annotation.RequiresApi
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import id.niteroomcreation.archcomponent.util.LogHelper
-import id.niteroomcreation.calculatorcamera.domain.data.InOut
-import id.niteroomcreation.calculatorcamera.domain.di.Injector
+import id.niteroomcreation.calculatorcamera.domain.entity.InOut
+import id.niteroomcreation.calculatorcamera.di.Injector
+import id.niteroomcreation.calculatorcamera.domain.repositories.RepositoryImpl
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
@@ -84,14 +85,12 @@ class Repository : RepositoryImpl {
                     )
                 )
 
-
 //                val encodeValue = Base64.getEncoder().encodeToString(temp.toByteArray())
                 val encodeValue =
                     android.util.Base64.encode(
                         temp.toByteArray(),
                         android.util.Base64.DEFAULT
                     )
-//                fileOutputStream.write("".toByteArray())
                 fileOutputStream.write(encodeValue)
 
                 LogHelper.e(TAG, "list gonna encode", temp, "encode to", encodeValue)

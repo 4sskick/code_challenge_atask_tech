@@ -1,11 +1,11 @@
-package id.niteroomcreation.calculatorcamera.feature.splash
+package id.niteroomcreation.calculatorcamera.presenter.feature.splash
 
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import id.niteroomcreation.calculatorcamera.R
-import id.niteroomcreation.calculatorcamera.util.NavUtils
+import id.niteroomcreation.calculatorcamera.presenter.util.NavUtils
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

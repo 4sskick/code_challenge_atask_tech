@@ -1,4 +1,4 @@
-package id.niteroomcreation.calculatorcamera.custom.scanner
+package id.niteroomcreation.calculatorcamera.presenter.util.view_custom.scanner
 
 /**
  * Created by Septian Adi Wijaya on 02/03/2023.

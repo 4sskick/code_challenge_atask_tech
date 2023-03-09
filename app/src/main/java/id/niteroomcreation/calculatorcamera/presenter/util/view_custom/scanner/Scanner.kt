@@ -1,4 +1,4 @@
-package id.niteroomcreation.calculatorcamera.custom.scanner
+package id.niteroomcreation.calculatorcamera.presenter.util.view_custom.scanner
 
 import android.Manifest
 import android.app.Activity
