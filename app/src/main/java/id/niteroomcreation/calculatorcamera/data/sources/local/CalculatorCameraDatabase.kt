@@ -57,9 +57,9 @@ abstract class CalculatorCameraDatabase : RoomDatabase() {
         }
 
         private fun prepopulateDB() = listOf(
-            InOut(id = 1, inStr = "2+4", outStr = "6"),
-            InOut(id = 2, inStr = "34x6", outStr = "204"),
-            InOut(id = 3, inStr = "25-9", outStr = "16"),
+            InOut(inStr = "2+4", outStr = "6"),
+            InOut(inStr = "34x6", outStr = "204"),
+            InOut(inStr = "25-9", outStr = "16"),
         )
     }
 }

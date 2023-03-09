@@ -6,9 +6,10 @@ import androidx.annotation.RequiresApi
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import id.niteroomcreation.archcomponent.util.LogHelper
+import id.niteroomcreation.calculatorcamera.data.entity.InOut
 import id.niteroomcreation.calculatorcamera.data.sources.local.CalculatorCameraDatabase
 import id.niteroomcreation.calculatorcamera.di.Injector
-import id.niteroomcreation.calculatorcamera.domain.entity.InOut
+import id.niteroomcreation.calculatorcamera.domain.entity.InOutModel
 import id.niteroomcreation.calculatorcamera.domain.repositories.RepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,22 +30,22 @@ class Repository(private val database: CalculatorCameraDatabase) : RepositoryImp
 
     var gson = GsonBuilder().create()
 
-    override suspend fun getFromDB(): List<InOut> {
+    override suspend fun getFromDB(): List<InOutModel> {
         return database.inOutDao()
             .getAll()
             .map {
-                InOut(inStr = it.inStr, outStr = it.outStr)
+                InOutModel(inStr = it.inStr, outStr = it.outStr)
             }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun getFromInternal(): ArrayList<InOut> {
+    override suspend fun getFromInternal(): ArrayList<InOutModel> {
 
         //load data to read from file
         //if doesn't create yet, init process & return empty
         //otherwise, read data -> decode from base 64 -> json mapping into list -> return
 
-        var result = ArrayList<InOut>()
+        var result = ArrayList<InOutModel>()
 
         try {
             var fileInputStream = Injector.provideContext().openFileInput("internal.txt")
@@ -72,7 +73,7 @@ class Repository(private val database: CalculatorCameraDatabase) : RepositoryImp
             LogHelper.e(TAG, "file content", stringBuilder, "after decode", decodeValue)
 
             //json mapping
-            val itemType = object : TypeToken<ArrayList<InOut>>() {}.type
+            val itemType = object : TypeToken<ArrayList<InOutModel>>() {}.type
             result = gson.fromJson(decodeValue, itemType)
 
             LogHelper.e(TAG, "result gonna be", result)
@@ -89,9 +90,9 @@ class Repository(private val database: CalculatorCameraDatabase) : RepositoryImp
 
                 //convert into json
                 result = arrayListOf(
-                    InOut("2+3", "5"),
-                    InOut("3+4", "7"),
-                    InOut("56x4", "224"),
+                    InOutModel("2+3", "5"),
+                    InOutModel("3+4", "7"),
+                    InOutModel("56x4", "224"),
                 )
                 val temp = gson.toJson(result)
 
@@ -117,15 +118,15 @@ class Repository(private val database: CalculatorCameraDatabase) : RepositoryImp
         return result
     }
 
-    override suspend fun postToDB() {
-//        TODO("Not yet implemented")
+    override suspend fun postToDB(inStr: String, outStr: String) {
+        database.inOutDao().insert(InOut(inStr, outStr))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun postToInternal(inStr: String, outStr: String) {
         try {
             var existing = getFromInternal()
-            existing.add(InOut(inStr, outStr))
+            existing.add(InOutModel(inStr, outStr))
 
             val temp = gson.toJson(existing)
             val encodeValue =

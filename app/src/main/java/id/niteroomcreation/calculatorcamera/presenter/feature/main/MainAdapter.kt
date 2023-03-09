@@ -4,15 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import id.niteroomcreation.calculatorcamera.databinding.IMainBinding
-import id.niteroomcreation.calculatorcamera.domain.entity.InOut
+import id.niteroomcreation.calculatorcamera.domain.entity.InOutModel
 
 /**
  * Created by Septian Adi Wijaya on 23/02/2023.
  * please be sure to add credential if you use people's code
  */
-class MainAdapter(private var data: List<InOut>) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+class MainAdapter(private var data: List<InOutModel>) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
-    fun submit(update:List<InOut>){
+    fun submit(update:List<InOutModel>){
         data = update
     }
 
@@ -35,7 +35,7 @@ class MainAdapter(private var data: List<InOut>) : RecyclerView.Adapter<MainAdap
     }
 
     class ViewHolder(private val binding: IMainBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun binds(inOut: InOut) {
+        fun binds(inOut: InOutModel) {
             binding.iMainInput.text = inOut.inStr
             binding.iMainOutput.text = inOut.outStr
         }

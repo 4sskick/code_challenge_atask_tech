@@ -23,11 +23,7 @@ class MainActivity : AppCompatActivity() {
         val TAG = MainActivity::class.java.simpleName
     }
 
-    private val currentRadioSelected: RadioButton by lazy {
-        binding.mainLayoutRadioGroup.findViewById(
-            binding.mainLayoutRadioGroup.checkedRadioButtonId
-        ) as RadioButton
-    }
+    private lateinit var selectedModeDataLoad: RadioButton
 
     private val mainViewModel by lazy {
         ViewModelProvider(
@@ -43,20 +39,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = AMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
-//        currentRadioSelected = binding.mainLayoutRadioGroup.findViewById(
-//            binding.mainLayoutRadioGroup.checkedRadioButtonId
-//        ) as RadioButton
+        selectedModeDataLoad = binding.mainLayoutRadioGroup
+            .findViewById(binding.mainLayoutRadioGroup.checkedRadioButtonId) as RadioButton
 
         setupObserver()
         setupAdapter()
 
         binding.mainLayoutRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            val rSelect = findViewById<RadioButton>(checkedId)
+            selectedModeDataLoad = findViewById<RadioButton>(checkedId)
 
-            if (rSelect.text.contains("storage")) {
+            if (selectedModeDataLoad.text.contains("storage")) {
                 mainViewModel.dataInternal()
             } else
                 mainViewModel.dataDB()
@@ -110,18 +104,23 @@ class MainActivity : AppCompatActivity() {
 
                         //expect everything that no crash is a success operation even the result is zero or expression's result not correct
                         //begin to post
-                        mainViewModel.postInternal(
-                            inStr = data,
-                            outStr = "$result"
-                        )
+                        if (selectedModeDataLoad.text.contains("storage")) {
+                            mainViewModel.postInternal(
+                                inStr = data,
+                                outStr = "$result"
+                            )
+                        } else {
+                            mainViewModel.postDataDB(
+                                inStr = data,
+                                outStr = "$result"
+                            )
+                        }
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
 
-                } else {
-                    LogHelper.e(TAG, "onCreate: CANCELED")
+                } else
                     Toast.makeText(this, "Scan CANCELED", Toast.LENGTH_LONG).show()
-                }
             }
 
         val imageRequest = registerForActivityResult(ActivityResultContracts.GetContent()) {
@@ -162,7 +161,7 @@ class MainActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         })
 
-        if (currentRadioSelected.text.contains("storage")) {
+        if (selectedModeDataLoad.text.contains("storage")) {
             //gonna load data from file been written on internal dir 'data'
             mainViewModel.dataInternal()
         } else

@@ -3,7 +3,7 @@ package id.niteroomcreation.calculatorcamera.presenter.feature.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import id.niteroomcreation.calculatorcamera.domain.entity.InOut
+import id.niteroomcreation.calculatorcamera.domain.entity.InOutModel
 import id.niteroomcreation.calculatorcamera.domain.repositories.RepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
  */
 class MainViewModel(private val repo: RepositoryImpl) : ViewModel() {
 
-    private var data_ = MutableLiveData<List<InOut>>()
+    private var data_ = MutableLiveData<List<InOutModel>>()
     var data = data_
 
     init {
@@ -33,9 +33,10 @@ class MainViewModel(private val repo: RepositoryImpl) : ViewModel() {
         }
     }
 
-    fun postDataDB() {
+    fun postDataDB(inStr: String, outStr: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.postToDB()
+            repo.postToDB(inStr, outStr)
+            dataDB()
         }
     }
 
@@ -48,17 +49,17 @@ class MainViewModel(private val repo: RepositoryImpl) : ViewModel() {
 
     private fun getData() {
         data_.value = listOf(
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
-            InOut(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
+            InOutModel(String.format("Input %s", "2+3"), String.format("Output %s", 5)),
         )
     }
 }

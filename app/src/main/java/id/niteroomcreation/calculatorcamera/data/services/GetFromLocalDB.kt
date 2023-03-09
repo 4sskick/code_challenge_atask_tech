@@ -1,6 +1,6 @@
 package id.niteroomcreation.calculatorcamera.data.services
 
-import id.niteroomcreation.calculatorcamera.domain.entity.InOut
+import id.niteroomcreation.calculatorcamera.domain.entity.InOutModel
 
 /**
  * Created by Septian Adi Wijaya on 09/03/2023.
@@ -13,7 +13,7 @@ class GetFromLocalDB {
         val TAG = GetFromLocalDB::class.java.simpleName
     }
 
-    fun getDataItems(): List<InOut> {
+    fun getDataItems(): List<InOutModel> {
         return emptyList()
     }
 
