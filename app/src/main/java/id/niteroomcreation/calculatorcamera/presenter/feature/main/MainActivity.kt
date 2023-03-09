@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private val mainViewModel by lazy {
         ViewModelProvider(
             owner = this,
-            ViewModelFactory.getInstance()
+            ViewModelFactory.getInstance(this)
         ).get(MainViewModel::class.java)
     }
 

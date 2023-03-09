@@ -6,8 +6,9 @@ import androidx.annotation.RequiresApi
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import id.niteroomcreation.archcomponent.util.LogHelper
-import id.niteroomcreation.calculatorcamera.domain.entity.InOut
+import id.niteroomcreation.calculatorcamera.data.sources.local.CalculatorCameraDatabase
 import id.niteroomcreation.calculatorcamera.di.Injector
+import id.niteroomcreation.calculatorcamera.domain.entity.InOut
 import id.niteroomcreation.calculatorcamera.domain.repositories.RepositoryImpl
 import java.io.BufferedReader
 import java.io.FileNotFoundException
@@ -18,14 +19,18 @@ import java.util.*
  * Created by Septian Adi Wijaya on 08/03/2023.
  * please be sure to add credential if you use people's code
  */
-class Repository : RepositoryImpl {
+class Repository(private val database: CalculatorCameraDatabase) : RepositoryImpl {
 
     companion object {
         val TAG = Repository::class.java.simpleName
     }
 
     override suspend fun getFromDB(): List<InOut> {
-        return emptyList()
+        return database.inOutDao()
+            .getAll()
+            .map {
+                InOut(inStr = it.inStr, outStr = it.outStr)
+            }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
