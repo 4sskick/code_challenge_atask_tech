@@ -117,6 +117,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
+                        Toast.makeText(this, "Failed to calculate, try simpler expression e.g (2+3)", Toast.LENGTH_LONG).show()
                     }
 
                 } else

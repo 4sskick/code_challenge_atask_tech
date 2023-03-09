@@ -110,9 +110,11 @@ class Scanner() {
             listener.onStateChanged(state, 3)
         }
 
-        val imageFrame: Frame = Frame.Builder()
-            .setBitmap(bitmap) // your image bitmap
-            .build()
+        val imageFrame: Frame? = bitmap?.let {
+            Frame.Builder()
+                .setBitmap(it) // your image bitmap
+                .build()
+        }
 
         camera.holder.addCallback(object : SurfaceHolder.Callback {
             @RequiresApi(Build.VERSION_CODES.M)
@@ -150,21 +152,24 @@ class Scanner() {
         })
 
         var stringBuilder = StringBuilder()
-        val textBlocks = textRecognizer.detect(imageFrame)
+        val textBlocks: SparseArray<TextBlock>? = imageFrame?.let { textRecognizer.detect(it) }
 
         state = "running"
         listener.onStateChanged(state, 1)
 
-
-        for (i in 0 until textBlocks.size()) {
-            val item = textBlocks[textBlocks.keyAt(i)]
-            stringBuilder.append(item.value).append("\n")
+        if (textBlocks != null) {
+            for (i in 0 until textBlocks.size()) {
+                val item = textBlocks[textBlocks.keyAt(i)]
+                stringBuilder.append(item.value).append("\n")
 //            imageText = item.value // return string
+            }
+
+            act.runOnUiThread { listener.onDetected(stringBuilder.toString()) }
+            Log.e(TAG, "receiveDetections: $stringBuilder")
+        }else {
+            state = "not ready yet"
+            listener.onStateChanged(state, 3)
         }
-
-        act.runOnUiThread { listener.onDetected(stringBuilder.toString()) }
-        Log.e(TAG, "receiveDetections: $stringBuilder")
-
     }
 
     private fun prepareScanning() {

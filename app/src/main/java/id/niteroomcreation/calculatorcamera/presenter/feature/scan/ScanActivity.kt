@@ -54,8 +54,14 @@ class ScanActivity : AppCompatActivity() {
 
                 }
 
-                override fun onStateChanged(state: String, i: Int) {
-                    Log.e(TAG, "onStateChanged: state: $state, code: $i")
+                override fun onStateChanged(state: String, code: Int) {
+                    Log.e(TAG, "onStateChanged: state: $state, code: $code")
+
+                    if (code == 3) {
+                        Toast.makeText(this@ScanActivity, state, Toast.LENGTH_SHORT).show()
+                        setResult(Activity.RESULT_CANCELED)
+                        finish()
+                    }
                 }
             })
 
