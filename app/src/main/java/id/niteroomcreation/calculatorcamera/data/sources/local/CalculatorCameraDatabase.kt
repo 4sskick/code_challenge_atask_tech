@@ -9,6 +9,8 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper
 import id.niteroomcreation.calculatorcamera.data.entity.InOut
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 
 /**
  * Created by Septian Adi Wijaya on 09/03/2023.
@@ -51,8 +53,8 @@ abstract class CalculatorCameraDatabase : RoomDatabase() {
             })
 
             //paraphrase master key DB
-//            builder.openHelperFactory(SupportFactory(SQLiteDatabase.getBytes("rahasia".toCharArray())))
-            builder.openHelperFactory(openHelperFactory)
+            builder.openHelperFactory(SupportFactory(SQLiteDatabase.getBytes("rahasia".toCharArray())))
+//            builder.openHelperFactory(openHelperFactory)
             return builder.build()
         }
 
