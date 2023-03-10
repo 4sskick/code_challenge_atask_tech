@@ -39,4 +39,9 @@ on build process would be produce 4 variants from delivered source code:
 ## Approach:
 - Modern Android Architecture (MVVM)
 - coroutine
+----
+## ToDo:
+- unit test not configured yet
+- already pre-populate data
+- clean unused code
 
