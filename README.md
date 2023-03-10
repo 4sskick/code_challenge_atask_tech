@@ -1,5 +1,8 @@
 # Calculator Camera
 ---
+
+The app should allow the user to capture arithmetic expressions (i.e. 1+2) either directly from the built-in camera or from an image file picked by the user from the filesystem. Once the input is provided the app should detect the expression in the picture and compute its result. The result should be stored locally so the user can browse recent operations.
+
 ## UI Design
 ![alt](https://drive.google.com/uc?export=view&id=1SwrkH1VCTyWFpYSxOn5ZPkqi0C-uGAfX)
 
