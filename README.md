@@ -1,5 +1,7 @@
 # Calculator Camera
 ---
+## UI Design
+![alt](https://drive.google.com/uc?export=view&id=1SwrkH1VCTyWFpYSxOn5ZPkqi0C-uGAfX)
 
 ## Requirements:
 - input can be provided by using the built-in camera directly or by picking a picture from the filesystem
